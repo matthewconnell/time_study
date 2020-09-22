@@ -9,7 +9,25 @@
     <h1 style="text-align: center">Time Study</h1>
     {% if tasks|length < 1 %}
     <h4 style="text-align: center">There are no entries. Start one below</h4>
+    <form action="/" method="POST">
+        <input type="text" name="content" id="content">
+        <br>
+        <input type="submit" value="Start">
+    </form>
+    <form action="/" method="POST">
+        <input type="submit" name="end_button" value="End">
+    </form>
     {% else %}
+
+    <form action="/" method="POST">
+        <input type="text" name="content" id="content">
+        <br>
+        <input type="submit" value="Start">
+    </form>
+    <form action="/" method="POST">
+        <input type="submit" name="end_button" value="End">
+    </form>
+
     <table>
         <tr>
             <th>Task</th>
@@ -33,13 +51,6 @@
         {% endfor %}
     </table>
     {% endif %}
-    <form action="/" method="POST">
-        <input type="text" name="content" id="content">
-        <br>
-        <input type="submit" value="Start">
-    </form>
-    <form action="/" method="POST">
-        <input type="submit" name="end_button" value="End">
-    </form>
+
 </div>
 {% endblock %}
