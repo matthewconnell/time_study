@@ -28,7 +28,7 @@ def index():
             db.session.commit()
             return redirect('/')
         except:
-            return "There was an issue deleting."
+            return "There was an issue."
 
     else:
         tasks = Todo.query.order_by(Todo.date_created).all()
@@ -45,6 +45,31 @@ def delete(id):
     
     except:
         return "There was a problem deleting."
+
+@app.route('/start/<int:id>', methods=['GET', 'POST'])
+def start(id):
+
+    task = Todo.query.get_or_404(id)
+    try:
+        start = datetime.now()
+        return redirect('/')
+    
+    except:
+        return "There was a problem starting the timer"
+    
+@app.route('/end/<int:id>', methods = ['GET', 'POST'])
+def end(id):
+
+    task = Todo.query.get_or_404(id)
+    try:
+        end = datetime.now()
+        diff = end - start
+        diff = diff.total_seconds()
+        return redirect('/')
+    
+    except:
+        return "There was a problem ending the timer"
+
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
