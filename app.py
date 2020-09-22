@@ -13,7 +13,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    time_diff = db.Column(db.Integer, nullable=True)
+    time_diff = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return "<Task %r>" % self.id
@@ -29,7 +29,7 @@ def index():
             db.session.commit()
             return redirect('/')
         except:
-            return "There was an issue."
+            return "There was an issue creating the task."
 
     else:
         tasks = Todo.query.order_by(Todo.date_created).all()
@@ -47,29 +47,36 @@ def delete(id):
     except:
         return "There was a problem deleting."
 
-@app.route('/start/<int:id>', methods=['GET', 'POST'])
-def start(id):
+# @app.route('/start/<int:id>', methods=['GET', 'POST'])
+# def start(id):
 
-    task = Todo.query.get_or_404(id)
-    try:
-        start = datetime.now()
-        return redirect('/')
+#     task = Todo.query.get_or_404(id)
+#     try:
+#         start = datetime.now()
+#         return redirect('/')
     
-    except:
-        return "There was a problem starting the timer"
+#     except:
+#         return "There was a problem starting the timer"
     
 @app.route('/end/<int:id>', methods = ['GET', 'POST'])
 def end(id):
 
     task = Todo.query.get_or_404(id)
-    try:
-        end = datetime.now()
-        diff = end - start
-        diff = diff.total_seconds()
-        return redirect('/')
-    
-    except:
-        return "There was a problem ending the timer"
+
+    if request.method == 'POST':
+
+        try:
+            end = datetime.utcnow()
+            diff = end - task.date_created
+            diff = diff.total_seconds()
+            task.time_diff = diff
+            db.session.commit()
+            print("Blah")
+
+            return redirect('/')
+        
+        except:
+            return "There was a problem ending the timer"
 
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])

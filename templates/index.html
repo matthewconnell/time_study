@@ -32,20 +32,22 @@
         <tr>
             <th>Task</th>
             <th>Date</th>
-            <th>Time</th>
+            <th>Time (s)</th>
             <th>Action</th>
         </tr>
         {% for task in tasks %}
         <tr>
             <td>{{ task.content}}</td>
             <td>{{ task.date_created.date() }}</td>
-            <td>{{ task.date_created.time() }}</td>
+            <td>{{ task.time_diff }}</td>
             <td>
                 <a href="/delete/{{task.id}}">Delete</a>
                 <br>
-                <a href="/start/{{task.id}}">Start</a>
+               <!-- <a href="/start/{{task.id}}">Start</a> -->
                 <br>
-                <a href="/end/{{task.id}}">End</a>
+                <form action="/end/{{task.id}}" method="POST">
+                    <input type="submit" name="end_button" value="End">
+                </form></a>
             </td>
         </tr>
         {% endfor %}
