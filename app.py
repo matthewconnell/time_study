@@ -71,7 +71,6 @@ def end(id):
             diff = diff.total_seconds()
             task.time_diff = diff
             db.session.commit()
-            print("Blah")
 
             return redirect('/')
         
