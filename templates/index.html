@@ -20,11 +20,11 @@
     {% else %}
 
     <form action="/" method="POST">
-        <input type="text" name="content" id="content">
+        <input type="text" name="content" id="content" value="{{tasks[tasks|length-1].content}}">
         <br>
         <input type="submit" value="Start">
     </form>
-    <form action="/" method="POST">
+    <form action="/end/{{tasks[tasks|length-1].id}}" method="POST">
         <input type="submit" name="end_button" value="End">
     </form>
 
@@ -42,12 +42,6 @@
             <td>{{ task.time_diff }}</td>
             <td>
                 <a href="/delete/{{task.id}}">Delete</a>
-                <br>
-               <!-- <a href="/start/{{task.id}}">Start</a> -->
-                <br>
-                <form action="/end/{{task.id}}" method="POST">
-                    <input type="submit" name="end_button" value="End">
-                </form></a>
             </td>
         </tr>
         {% endfor %}
