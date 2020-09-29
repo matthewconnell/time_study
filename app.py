@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
-class Todo(db.Model):
+class Task(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
@@ -21,23 +21,23 @@ class Todo(db.Model):
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = Todo(content=task_content)
+        employee_name = request.form['content']
+        new_entry = Task(content=employee_name)
 
         try:
-            db.session.add(new_task)
+            db.session.add(new_entry)
             db.session.commit()
             return redirect('/')
         except:
             return "There was an issue creating the task."
 
     else:
-        tasks = Todo.query.order_by(Todo.date_created).all()
+        tasks = Task.query.order_by(Task.date_created).all()
         return render_template('index.html', tasks = tasks)
 
 @app.route('/delete/<int:id>')
 def delete(id):
-    task_to_delete = Todo.query.get_or_404(id)
+    task_to_delete = Task.query.get_or_404(id)
 
     try:
         db.session.delete(task_to_delete)
@@ -50,7 +50,7 @@ def delete(id):
 # @app.route('/start/<int:id>', methods=['GET', 'POST'])
 # def start(id):
 
-#     task = Todo.query.get_or_404(id)
+#     task = Task.query.get_or_404(id)
 #     try:
 #         start = datetime.now()
 #         return redirect('/')
@@ -61,7 +61,7 @@ def delete(id):
 @app.route('/end/<int:id>', methods = ['GET', 'POST'])
 def end(id):
 
-    task = Todo.query.get_or_404(id)
+    task = Task.query.get_or_404(id)
 
     if request.method == 'POST':
 
@@ -81,7 +81,7 @@ def end(id):
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
 
-    task = Todo.query.get_or_404(id)
+    task = Task.query.get_or_404(id)
 
     if request.method == 'POST':
         task.content = request.form['content']
