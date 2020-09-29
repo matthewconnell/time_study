@@ -1,8 +1,13 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import altair as alt
 import time
+import pandas as pd
+import json
+
+import random
+from vega_datasets import data
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -34,7 +39,8 @@ def index():
     else:
         tasks = Task.query.order_by(Task.date_created).all()
         return render_template('index.html', 
-                                tasks = tasks)
+                                tasks = tasks,
+                                chart=graph())
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -78,7 +84,6 @@ def end(id):
         except:
             return "There was a problem ending the timer"
 
-
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
 
@@ -92,10 +97,52 @@ def update(id):
             return redirect('/')
         except:
             return 'There was an issue updating.'
-        
+
     else:
         return render_template('update.html', task=task)
 
+tasks = Task.query.order_by(Task.date_created).all()
+
+names = []
+dates = []
+times = []
+index = list(range(len(tasks)))
+
+for task in tasks:
+    names.append(task.content)
+    dates.append(str(task.date_created.date()))
+    times.append(task.time_diff)
+
+df = pd.DataFrame({"Ind": index, 
+                    "Name": names, 
+                    "Date": dates, 
+                    "Time": times})
+
+cars = data.cars()
+# alt.renderers.enable('default')
+
+WIDTH = 600
+HEIGHT = 300
+
+@app.route('/chart')
+def graph():
+    
+    chart = alt.Chart(df).mark_line().encode(
+    x = alt.X('Ind:Q'),
+    y = alt.Y('Time:Q')
+    ).interactive()
+
+    return chart.to_json()
+
+    
+
+    # chart = alt.Chart(
+    #     data=cars, height=700, width=700).mark_point().encode(
+    #         x='Horsepower',
+    #         y='Miles_per_Gallon',
+    #         color='Origin',
+    #     ).interactive()
+    # return chart.to_json()
 
 if __name__ == "__main__":
     app.run(debug=True)

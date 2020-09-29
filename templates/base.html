@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+      <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+      <!-- From https://github.com/vega/vega-embed-->
+  <script src="https://cdn.jsdelivr.net/npm/vega@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc12"></script>
+  <!-- Import vega-embed -->
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+
     {% block head %}{% endblock %}
 </head>
 <body>
     {% block body %}{% endblock %}
+    <br>
+    <br>
+
+    Copyright Matthew Connell 2020
 </body>
 </html>
