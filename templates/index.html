@@ -4,9 +4,11 @@
 {% endblock %}
 
 {% block body %}
-<div class="content">
+<div class="head">
     <h1 style="text-align: center">Time Study</h1>
+
     {% if tasks|length < 1 %}
+
     <h4 style="text-align: center">There are no entries. Start one below</h4>
     <form action="/" method="POST">
         <input type="text" name="content" id="content">
@@ -16,6 +18,8 @@
     <form action="/" method="POST">
         <input type="submit" name="end_button" value="End">
     </form>
+</div>
+
     {% else %}
 
     <form action="/" method="POST">
@@ -26,6 +30,9 @@
     <form action="/end/{{tasks[tasks|length-1].id}}" method="POST">
         <input type="submit" name="end_button" value="End">
     </form>
+</div>
+
+    <div class="content">
 
     <table>
         <tr>
@@ -48,8 +55,10 @@
         {% endfor %}
     </table>
 
-    <div class="charts text-center">
-        <div class="row"><div id="bar"></div></div><hr>
+    </div>
+
+    <div class="chart">
+        <div id="bar">
 
     <!-- Render Charts -->
     <script type="text/javascript">
@@ -73,8 +82,9 @@
 
     <br>
 
+    </div>
+
 
     {% endif %}
 
-</div>
 {% endblock %}

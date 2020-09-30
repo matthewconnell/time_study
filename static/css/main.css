@@ -4,17 +4,36 @@ body, html {
 }
 
 .content {
-    margin: 0 auto;
-    width: 400px;
+    display: inline-block;
+    float: left;
+    margin-inline: 100px;
 }
+
+.chart {
+    margin-inline: 100px;
+    display: inline-block;
+}
+
+.head {
+    margin: 0 auto;
+    width: 200px;
+}
+
+.footer {
+    margin: 0 auto;
+    width: 200px;
+    text-align: center;
+}
+
 
 table, td, th {
     border: 1px solid #aaa;
+    
 }
 
 table {
     border-collapse: collapse;
-    width: 100%;
+    display: inline-block;
 }
 
 th {
