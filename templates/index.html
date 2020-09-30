@@ -42,7 +42,7 @@
             <th>Time (s)</th>
             <th>Action</th>
         </tr>
-        {% for task in tasks %}
+        {% for task in tasks[tasks|length - 16:tasks|length-1] %}
         <tr>
             <td>{{ task.content}}</td>
             <td>{{ task.occurence }}</td>

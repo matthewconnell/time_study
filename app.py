@@ -122,8 +122,8 @@ def update(id):
 cars = data.cars()
 # alt.renderers.enable('default')
 
-WIDTH = 450
-HEIGHT = 150
+WIDTH = 600
+HEIGHT = 350
 
 @app.route('/chart')
 def graph():
