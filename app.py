@@ -17,24 +17,40 @@ class Task(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
+    occurence = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     time_diff = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return "<Task %r>" % self.id
 
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
+
+    occ = 0
+
     if request.method == 'POST':
         employee_name = request.form['content']
-        new_entry = Task(content=employee_name)
+
+        tasks = Task.query.order_by(Task.date_created).all()
+
+        names = []
+
+        for task in tasks:
+            names.append(task.content)
+
+        occ = names.count(employee_name)
+
+        new_entry = Task(content=employee_name,
+                        occurence=occ)
 
         try:
             db.session.add(new_entry)
             db.session.commit()
             return redirect('/')
         except:
-            return "There was an issue creating the task."
+            return "There was an issue creating the occurence."
 
     else:
         tasks = Task.query.order_by(Task.date_created).all()
@@ -101,48 +117,48 @@ def update(id):
     else:
         return render_template('update.html', task=task)
 
-tasks = Task.query.order_by(Task.date_created).all()
 
-names = []
-dates = []
-times = []
-index = list(range(len(tasks)))
-
-for task in tasks:
-    names.append(task.content)
-    dates.append(str(task.date_created.date()))
-    times.append(task.time_diff)
-
-df = pd.DataFrame({"Ind": index, 
-                    "Name": names, 
-                    "Date": dates, 
-                    "Time": times})
 
 cars = data.cars()
 # alt.renderers.enable('default')
 
-WIDTH = 600
-HEIGHT = 300
+WIDTH = 450
+HEIGHT = 150
 
 @app.route('/chart')
 def graph():
+
+    tasks = Task.query.order_by(Task.date_created).all()
+
+    names = []
+    dates = []
+    times = []
+    index = []
+
+    for task in tasks:
+        names.append(task.content)
+        dates.append(str(task.date_created.date()))
+        times.append(task.time_diff)
+        index.append(task.occurence)
+
+    df = pd.DataFrame({"Ind": index, 
+                    "Name": names, 
+                    "Date": dates, 
+                    "Time": times})
     
-    chart = alt.Chart(df).mark_line().encode(
+    chart = alt.Chart(
+        data=df,
+        height=HEIGHT,
+        width=WIDTH
+        ).mark_line().encode(
+
     x = alt.X('Ind:Q'),
-    y = alt.Y('Time:Q')
+    y = alt.Y('Time:Q'),
+    color = alt.Color('Name:N')
+
     ).interactive()
 
     return chart.to_json()
-
-    
-
-    # chart = alt.Chart(
-    #     data=cars, height=700, width=700).mark_point().encode(
-    #         x='Horsepower',
-    #         y='Miles_per_Gallon',
-    #         color='Origin',
-    #     ).interactive()
-    # return chart.to_json()
 
 if __name__ == "__main__":
     app.run(debug=True)

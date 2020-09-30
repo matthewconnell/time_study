@@ -29,7 +29,8 @@
 
     <table>
         <tr>
-            <th>Task</th>
+            <th>Name</th>
+            <th>Occurence</th>
             <th>Date</th>
             <th>Time (s)</th>
             <th>Action</th>
@@ -37,6 +38,7 @@
         {% for task in tasks %}
         <tr>
             <td>{{ task.content}}</td>
+            <td>{{ task.occurence }}</td>
             <td>{{ task.date_created.date() }}</td>
             <td>{{ task.time_diff }}</td>
             <td>
