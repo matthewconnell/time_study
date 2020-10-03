@@ -1,4 +1,4 @@
-# time_study
+# Time Study tool
 
 A tool to assist with a time study.
 
