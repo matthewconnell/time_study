@@ -23,11 +23,9 @@ class Task(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     time_diff = db.Column(db.Integer, default=0)
     element = db.Column(db.Integer, default=0)
-    
 
     def __repr__(self):
         return "<Task %r>" % self.id
-
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
