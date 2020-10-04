@@ -4,14 +4,15 @@ body, html {
 }
 
 .content {
-    display: inline-block;
+    display: inline;
     float: left;
-    margin-inline: 100px;
+    margin-inline: 75px;
 }
 
 .chart {
-    margin-inline: 100px;
-    display: inline-block;
+    margin-inline: 75;
+    display: inline;
+    float: right;
 }
 
 .head {
