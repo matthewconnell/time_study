@@ -1,10 +1,12 @@
-from flask import Flask, render_template, url_for, request, redirect, jsonify, send_file, Response
+from flask import Flask, render_template, request, redirect, jsonify, send_file, Response
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import altair as alt
 import time
 import pandas as pd
 import json
+
+from openpyxl import Workbook
 
 import random
 from vega_datasets import data
@@ -117,8 +119,8 @@ def update(id):
     else:
         return render_template('update.html', task=task)
 
-@app.route('/download', methods=['GET', 'POST'])
-def download():
+@app.route('/download/csv', methods=['POST'])
+def download_csv():
 
     tasks = Task.query.order_by(Task.date_created).all()
 
@@ -138,15 +140,40 @@ def download():
                     "Date": dates, 
                     "Time": times})
 
-    df = df.to_csv()
-
-    print(df)
+    df_csv = df.to_csv()
 
     return Response(
-        df,
+        df_csv,
         mimetype="text/csv",
         headers={"Content-disposition":
                  "attachment; filename=time_study.csv"})
+
+@app.route('/download/xlsx', methods=['POST'])
+def download_xlsx():
+
+    tasks = Task.query.order_by(Task.date_created).all()
+
+    names = []
+    dates = []
+    times = []
+    index = []
+
+    for task in tasks:
+        names.append(task.content)
+        dates.append(str(task.date_created.date()))
+        times.append(task.time_diff)
+        index.append(task.occurence)
+
+    df = pd.DataFrame({"Ind": index, 
+                    "Name": names, 
+                    "Date": dates, 
+                    "Time": times})
+
+    df.to_excel('time_study.xlsx')
+
+    return send_file('time_study.xlsx', 
+                    as_attachment=True,
+                    attachment_filename='time_study.xlsx')
 
 
 
