@@ -3,16 +3,14 @@ body, html {
     font-family: sans-serif;
 }
 
-.content {
+.table {
     display: inline;
-    float: left;
     margin-inline: 75px;
 }
 
 .chart {
     margin-inline: 75;
     display: inline;
-    float: right;
 }
 
 .head {
