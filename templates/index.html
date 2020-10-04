@@ -23,7 +23,7 @@
     {% else %}
 
     <form action="/" method="POST">
-        <input type="text" name="content" id="content" value="{{tasks[tasks|length-1].content}}">
+        <input type="text" name="content" id="content" value="{{tasks[tasks|length-1].operator}}">
         <br>
         <input type="submit" value="Start">
     </form>
@@ -39,12 +39,12 @@
 
 </div>
 
-    <div class="content">
+    <div class="table">
 
     <table>
         <tr>
             <th>Name</th>
-            <th>Occurence</th>
+            <th>Observation</th>
             <th>Date</th>
             <th>Time (s)</th>
             <th>Action</th>
