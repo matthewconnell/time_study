@@ -49,6 +49,7 @@
             <th>Time (s)</th>
             <th>Action</th>
         </tr>
+        {% if tasks|length > 20 %}
         {% for task in tasks[tasks|length - 16:tasks|length-1] %}
         <tr>
             <td>{{ task.content}}</td>
@@ -60,6 +61,20 @@
             </td>
         </tr>
         {% endfor %}
+        {% else %}
+        {% for task in tasks %}
+       
+        <tr>
+            <td>{{ task.content}}</td>
+            <td>{{ task.occurence }}</td>
+            <td>{{ task.date_created.date() }}</td>
+            <td>{{ task.time_diff }}</td>
+            <td>
+                <a href="/delete/{{task.id}}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
     </table>
 
     </div>
