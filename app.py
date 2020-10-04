@@ -178,7 +178,6 @@ def download_xlsx():
 
 
 cars = data.cars()
-# alt.renderers.enable('default')
 
 WIDTH = 600
 HEIGHT = 350

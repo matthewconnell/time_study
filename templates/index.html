@@ -11,7 +11,15 @@
 
     <h4 style="text-align: center">There are no entries. Start one below</h4>
     <form action="/" method="POST">
+        Operator Name
         <input type="text" name="content" id="content">
+        <br>
+        Observation
+        <input type="text" name="observation" id="observation" value=1>
+        <br>
+        Number of elements
+        <input type="text" name="element" id="element" value=4>
+
         <br>
         <input type="submit" value="Start">
     </form>
@@ -23,10 +31,15 @@
     {% else %}
 
     <form action="/" method="POST">
+        Operator Name
         <input type="text" name="content" id="content" value="{{tasks[tasks|length-1].operator}}">
+        <br>
+        Observation
+        <input type="text" name="element" id="element" value="{{tasks[tasks|length-1].observation + 1}}">
         <br>
         <input type="submit" value="Start">
     </form>
+
     <form action="/end/{{tasks[tasks|length-1].id}}" method="POST">
         <input type="submit" name="end_button" value="End">
     </form>
@@ -43,11 +56,12 @@
 
     <table>
         <tr>
-            <th>Name</th>
+            <th>Operator name</th>
             <th>Observation</th>
+            <th>Element</th>
             <th>Date</th>
             <th>Time (s)</th>
-            <th>Action</th>
+            <th>Delete?</th>
         </tr>
         {% if tasks|length > 20 %}
         {% for task in tasks[tasks|length - 16:tasks|length-1] %}
