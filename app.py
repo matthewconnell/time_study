@@ -9,7 +9,6 @@ import json
 from openpyxl import Workbook
 
 import random
-from vega_datasets import data
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///time_study.db'
@@ -174,10 +173,6 @@ def download_xlsx():
     return send_file('time_study.xlsx', 
                     as_attachment=True,
                     attachment_filename='time_study.xlsx')
-
-
-
-cars = data.cars()
 
 WIDTH = 600
 HEIGHT = 350
