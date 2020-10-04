@@ -40,19 +40,19 @@ def index():
         names = []
 
         for task in tasks:
-            names.append(task.content)
+            names.append(task.operator)
 
         occ = names.count(employee_name)
 
-        new_entry = Task(content=employee_name,
-                        occurence=occ)
+        new_entry = Task(operator=employee_name,
+                        observation=occ)
 
         try:
             db.session.add(new_entry)
             db.session.commit()
             return redirect('/')
         except:
-            return "There was an issue creating the occurence."
+            return "There was an issue creating the observation."
 
     else:
         tasks = Task.query.order_by(Task.date_created).all()
@@ -108,7 +108,7 @@ def update(id):
     task = Task.query.get_or_404(id)
 
     if request.method == 'POST':
-        task.content = request.form['content']
+        task.operator = request.form['content']
 
         try:
             db.session.commit()
@@ -130,10 +130,10 @@ def download_csv():
     index = []
 
     for task in tasks:
-        names.append(task.content)
+        names.append(task.operator)
         dates.append(str(task.date_created.date()))
         times.append(task.time_diff)
-        index.append(task.occurence)
+        index.append(task.observation)
 
     df = pd.DataFrame({"Ind": index, 
                     "Name": names, 
@@ -159,10 +159,10 @@ def download_xlsx():
     index = []
 
     for task in tasks:
-        names.append(task.content)
+        names.append(task.operator)
         dates.append(str(task.date_created.date()))
         times.append(task.time_diff)
-        index.append(task.occurence)
+        index.append(task.observation)
 
     df = pd.DataFrame({"Ind": index, 
                     "Name": names, 
@@ -194,10 +194,10 @@ def graph():
     index = []
 
     for task in tasks:
-        names.append(task.content)
+        names.append(task.operator)
         dates.append(str(task.date_created.date()))
         times.append(task.time_diff)
-        index.append(task.occurence)
+        index.append(task.observation)
 
     df = pd.DataFrame({"Ind": index, 
                     "Name": names, 
