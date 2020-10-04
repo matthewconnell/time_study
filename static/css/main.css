@@ -5,11 +5,11 @@ body, html {
 
 .table {
     display: inline;
-    margin-inline: 75px;
+    margin-inline: 0;
 }
 
 .chart {
-    margin-inline: 75;
+    margin-inline: 0;
     display: inline;
 }
 

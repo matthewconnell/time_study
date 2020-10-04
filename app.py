@@ -4,10 +4,8 @@ from datetime import datetime
 import altair as alt
 import time
 import pandas as pd
+import numpy as np
 import json
-
-from openpyxl import Workbook
-
 import random
 
 app = Flask(__name__)
@@ -33,6 +31,7 @@ def index():
 
     if request.method == 'POST':
         employee_name = request.form['content']
+        num_elements = int(request.form['elements'])
 
         tasks = Task.query.order_by(Task.date_created).all()
 
@@ -44,7 +43,8 @@ def index():
         occ = names.count(employee_name)
 
         new_entry = Task(operator=employee_name,
-                        observation=occ)
+                        element=occ % num_elements + 1,
+                        observation=np.floor(occ/num_elements) + 1)
 
         try:
             db.session.add(new_entry)
