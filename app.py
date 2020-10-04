@@ -118,8 +118,7 @@ def update(id):
     else:
         return render_template('update.html', task=task)
 
-@app.route('/download/csv', methods=['POST'])
-def download_csv():
+def make_df():
 
     tasks = Task.query.order_by(Task.date_created).all()
 
@@ -127,17 +126,27 @@ def download_csv():
     dates = []
     times = []
     index = []
+    elements = []
 
     for task in tasks:
         names.append(task.operator)
         dates.append(str(task.date_created.date()))
         times.append(task.time_diff)
         index.append(task.observation)
+        elements.append(task.element)
 
-    df = pd.DataFrame({"Ind": index, 
-                    "Name": names, 
+    df = pd.DataFrame({"Observation": index, 
+                    "Name": names,
+                    "Element": elements, 
                     "Date": dates, 
                     "Time": times})
+
+    return df
+
+@app.route('/download/csv', methods=['POST'])
+def download_csv():
+
+    df = make_df()
 
     df_csv = df.to_csv()
 
@@ -150,23 +159,7 @@ def download_csv():
 @app.route('/download/xlsx', methods=['POST'])
 def download_xlsx():
 
-    tasks = Task.query.order_by(Task.date_created).all()
-
-    names = []
-    dates = []
-    times = []
-    index = []
-
-    for task in tasks:
-        names.append(task.operator)
-        dates.append(str(task.date_created.date()))
-        times.append(task.time_diff)
-        index.append(task.observation)
-
-    df = pd.DataFrame({"Ind": index, 
-                    "Name": names, 
-                    "Date": dates, 
-                    "Time": times})
+    df = make_df()
 
     df.to_excel('time_study.xlsx')
 
@@ -180,23 +173,7 @@ HEIGHT = 350
 @app.route('/chart')
 def graph():
 
-    tasks = Task.query.order_by(Task.date_created).all()
-
-    names = []
-    dates = []
-    times = []
-    index = []
-
-    for task in tasks:
-        names.append(task.operator)
-        dates.append(str(task.date_created.date()))
-        times.append(task.time_diff)
-        index.append(task.observation)
-
-    df = pd.DataFrame({"Ind": index, 
-                    "Name": names, 
-                    "Date": dates, 
-                    "Time": times})
+    df = make_df()
     
     chart = alt.Chart(
         data=df,
