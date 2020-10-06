@@ -57,13 +57,15 @@
 
     <div class="table">
 
+        <br>
+
     <table>
         <tr>
             <th>Operator name</th>
             <th>Observation</th>
             <th>Element</th>
             <th>Date</th>
-            <th>Time (s)</th>
+            <th>Time (seconds)</th>
             <th>Delete?</th>
         </tr>
         {% if tasks|length > 20 %}
@@ -73,13 +75,16 @@
             <td>{{ task.observation }}</td>
             <td>{{ task.element }} </td>
             <td>{{ task.date_created.date() }}</td>
-            <td>{{ task.time_diff }}</td>
+            <td>{{ "%.2f"|format(task.time_diff) }}</td>
             <td>
                 <a href="/delete/{{task.id}}">Delete</a>
             </td>
         </tr>
         {% endfor %}
         {% else %}
+
+
+
         {% for task in tasks %}
        
         <tr>
@@ -87,7 +92,7 @@
             <td>{{ task.observation }}</td>
             <td>{{ task.element }} </td>
             <td>{{ task.date_created.date() }}</td>
-            <td>{{ task.time_diff }}</td>
+            <td>{{ "%.2f"|format(task.time_diff) }}</td>
             <td>
                 <a href="/delete/{{task.id}}">Delete</a>
             </td>
@@ -98,10 +103,9 @@
 
     </div>
 
-    <div class="chart">
+    <!-- <div class="chart">
         <div id="bar">
 
-    <!-- Render Charts -->
     <script type="text/javascript">
         function parse(url, div) {
           var opt = {
@@ -116,7 +120,7 @@
           });
         }
   
-        parse("/chart", "bar")
+        parse("/chart", "bar") -->
 
      
       </script>

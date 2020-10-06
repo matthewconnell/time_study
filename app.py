@@ -30,6 +30,7 @@ def index():
     occ = 0
 
     if request.method == 'POST':
+
         employee_name = request.form['content']
         num_elements = int(request.form['elements'])
 
@@ -50,14 +51,33 @@ def index():
             db.session.add(new_entry)
             db.session.commit()
             return redirect('/')
+
         except:
             return "There was an issue creating the observation."
 
     else:
         tasks = Task.query.order_by(Task.date_created).all()
         return render_template('index.html', 
-                                tasks = tasks,
-                                chart=graph())
+                                tasks = tasks#,chart=graph()
+                                )
+
+# @app.route('/switch')
+# def switch():
+
+#     tasks = Task.query.order_by(Task.date_created).all()
+
+#     time_divisor = 1
+
+#     option = request.form['options']
+#     if option == 'minutes':
+#         time_divisor = 60
+#     else:
+#         time_divisor = 1        
+        
+#     return render_template('index.html', 
+#                             tasks = tasks,
+#                             chart=graph(),
+#                             time_divisor=1)
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -101,22 +121,22 @@ def end(id):
         except:
             return "There was a problem ending the timer"
 
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
-def update(id):
+# @app.route('/update/<int:id>', methods=['GET', 'POST'])
+# def update(id):
 
-    task = Task.query.get_or_404(id)
+#     task = Task.query.get_or_404(id)
 
-    if request.method == 'POST':
-        task.operator = request.form['content']
+#     if request.method == 'POST':
+#         task.operator = request.form['content']
 
-        try:
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'There was an issue updating.'
+#         try:
+#             db.session.commit()
+#             return redirect('/')
+#         except:
+#             return 'There was an issue updating.'
 
-    else:
-        return render_template('update.html', task=task)
+#     else:
+#         return render_template('update.html', task=task)
 
 def make_df():
 
@@ -170,24 +190,25 @@ def download_xlsx():
 WIDTH = 600
 HEIGHT = 350
 
-@app.route('/chart')
-def graph():
+# @app.route('/chart')
+# def graph():
 
-    df = make_df()
+#     df = make_df()
     
-    chart = alt.Chart(
-        data=df,
-        height=HEIGHT,
-        width=WIDTH
-        ).mark_line().encode(
+#     chart = alt.Chart(
+#         data=df,
+#         height=HEIGHT,
+#         width=WIDTH
+#         ).mark_line().encode(
 
-    x = alt.X('Ind:Q'),
-    y = alt.Y('Time:Q'),
-    color = alt.Color('Name:N')
+#     x = alt.X('Observation:Q'),
+#     y = alt.Y('Time:Q'),
+#     color = alt.Color('Name:N'),
+#     shape = alt.Shape('Element:N')
 
-    ).interactive()
+#     ).interactive()
 
-    return chart.to_json()
+#     return chart.to_json()
 
 if __name__ == "__main__":
     app.run(debug=True)
