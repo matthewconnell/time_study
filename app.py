@@ -58,7 +58,8 @@ def index():
     else:
         tasks = Task.query.order_by(Task.date_created).all()
         return render_template('index.html', 
-                                tasks = tasks#,chart=graph()
+                                tasks = tasks,
+                                chart=graph()
                                 )
 
 # @app.route('/switch')
@@ -190,25 +191,22 @@ def download_xlsx():
 WIDTH = 600
 HEIGHT = 350
 
-# @app.route('/chart')
-# def graph():
+@app.route('/chart')
+def graph():
 
-#     df = make_df()
+    df = make_df()
     
-#     chart = alt.Chart(
-#         data=df,
-#         height=HEIGHT,
-#         width=WIDTH
-#         ).mark_line().encode(
+    chart = alt.Chart(
+    data=df.groupby(by=['Name', 'Observation']).mean().reset_index(),
+        height=HEIGHT,
+        width=WIDTH
+).mark_line().encode(
+    x = alt.X('Observation:Q'),
+    y = alt.Y('Time:Q'),
+    color = alt.Color('Name')
+    ).interactive()
 
-#     x = alt.X('Observation:Q'),
-#     y = alt.Y('Time:Q'),
-#     color = alt.Color('Name:N'),
-#     shape = alt.Shape('Element:N')
-
-#     ).interactive()
-
-#     return chart.to_json()
+    return chart.to_json()
 
 if __name__ == "__main__":
     app.run(debug=True)
