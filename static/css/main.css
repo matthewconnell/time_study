@@ -6,6 +6,7 @@ body, html {
 .table {
     display: inline;
     margin-inline: 0;
+    position: relative;
 }
 
 .chart {
@@ -13,9 +14,29 @@ body, html {
     display: inline;
 }
 
-.head {
-    margin: 0 auto;
+.header {
+    background-color: dimgrey;
+    text-align: center;
+    padding: 5px;
+    color: whitesmoke;
+}
+
+.sidebar {
+    height: 100%;
     width: 200px;
+    position: fixed;
+    z-index: 0;
+    left: 0;
+    background-color: whitesmoke;
+    overflow-x: hidden;
+    padding-top: 20px;
+    padding-left: 20px;
+    color: black;
+}
+
+.main {
+    margin-left: 250px;
+    background-color: white;
 }
 
 .footer {

@@ -4,8 +4,11 @@
 {% endblock %}
 
 {% block body %}
-<div class="head">
-    <h1 style="text-align: center">Time Study</h1>
+<div class="header">
+    <h1>Time Study</h1>
+</div>
+<div class="sidebar">
+    
 
     {% if tasks|length < 1 %}
 
@@ -54,8 +57,8 @@
     </form>
 
 </div>
-
-    <div class="table">
+<div class="main">
+     <div class="table">
 
         <br>
 
@@ -103,7 +106,7 @@
 
     </div>
 
-    <div class="chart">
+    <!-- <div class="chart">
         <div id="bar">
 
     <script type="text/javascript">
@@ -126,6 +129,8 @@
       </script>
 
     <br>
+
+    </div> -->
 
     </div>
 
