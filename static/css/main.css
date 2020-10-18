@@ -1,12 +1,13 @@
 body, html {
     margin: 0;
     font-family: sans-serif;
+    
 }
 
-.table {
-    display: inline;
-    margin-inline: 0;
-    position: relative;
+table.table {
+    margin-left: auto;
+    margin-right: auto;
+    
 }
 
 .chart {
@@ -31,10 +32,6 @@ body, html {
     color: #818181;
 }
 
-.button {
-    padding: 16px 8px;
-}
-
 .sidebar {
     height: 100%;
     width: 200px;
@@ -51,6 +48,7 @@ body, html {
 .main {
     margin-left: 250px;
     background-color: white;
+    text-align: center;
 }
 
 .footer {
