@@ -21,6 +21,20 @@ body, html {
     color: whitesmoke;
 }
 
+.header a {
+    font-size: 25px;
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+.header a:hover {
+    color: #818181;
+}
+
+.button {
+    padding: 16px 8px;
+}
+
 .sidebar {
     height: 100%;
     width: 200px;
