@@ -17,9 +17,11 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     operator = db.Column(db.String(200), nullable=False)
     observation = db.Column(db.Integer, default=0)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    start_time = db.Column(db.DateTime, default=datetime.utcnow)
+    end_time = db.Column(db.DateTime, default=datetime.utcnow)
     time_diff = db.Column(db.Integer, default=0)
-    element = db.Column(db.Integer, default=0)
+    item_description = db.Column(db.String(200), nullable=False)
+    sku = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return "<Task %r>" % self.id
@@ -34,7 +36,7 @@ def index():
         employee_name = request.form['content']
         num_elements = int(request.form['elements'])
 
-        tasks = Task.query.order_by(Task.date_created).all()
+        tasks = Task.query.order_by(Task.start_time).all()
 
         names = []
 
@@ -56,29 +58,12 @@ def index():
             return "There was an issue creating the observation."
 
     else:
-        tasks = Task.query.order_by(Task.date_created).all()
+        tasks = Task.query.order_by(Task.start_time).all()
         return render_template('index.html', 
                                 tasks = tasks,
                                 chart=graph()
                                 )
 
-# @app.route('/switch')
-# def switch():
-
-#     tasks = Task.query.order_by(Task.date_created).all()
-
-#     time_divisor = 1
-
-#     option = request.form['options']
-#     if option == 'minutes':
-#         time_divisor = 60
-#     else:
-#         time_divisor = 1        
-        
-#     return render_template('index.html', 
-#                             tasks = tasks,
-#                             chart=graph(),
-#                             time_divisor=1)
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -91,17 +76,6 @@ def delete(id):
     
     except:
         return "There was a problem deleting."
-
-# @app.route('/start/<int:id>', methods=['GET', 'POST'])
-# def start(id):
-
-#     task = Task.query.get_or_404(id)
-#     try:
-#         start = datetime.now()
-#         return redirect('/')
-    
-#     except:
-#         return "There was a problem starting the timer"
     
 @app.route('/end/<int:id>', methods = ['GET', 'POST'])
 def end(id):
@@ -111,10 +85,9 @@ def end(id):
     if request.method == 'POST':
 
         try:
-            end = datetime.utcnow()
-            diff = end - task.date_created
-            diff = diff.total_seconds()
-            task.time_diff = diff
+            task.end_time= datetime.utcnow()
+            diff = task.end_time - task.start_time
+            task.time_diff = diff.total_seconds()
             db.session.commit()
 
             return redirect('/')
@@ -122,26 +95,10 @@ def end(id):
         except:
             return "There was a problem ending the timer"
 
-# @app.route('/update/<int:id>', methods=['GET', 'POST'])
-# def update(id):
-
-#     task = Task.query.get_or_404(id)
-
-#     if request.method == 'POST':
-#         task.operator = request.form['content']
-
-#         try:
-#             db.session.commit()
-#             return redirect('/')
-#         except:
-#             return 'There was an issue updating.'
-
-#     else:
-#         return render_template('update.html', task=task)
 
 def make_df():
 
-    tasks = Task.query.order_by(Task.date_created).all()
+    tasks = Task.query.order_by(Task.start_time).all()
 
     names = []
     dates = []
@@ -151,7 +108,7 @@ def make_df():
 
     for task in tasks:
         names.append(task.operator)
-        dates.append(str(task.date_created.date()))
+        dates.append(str(task.start_time.date()))
         times.append(task.time_diff)
         index.append(task.observation)
         elements.append(task.element)
