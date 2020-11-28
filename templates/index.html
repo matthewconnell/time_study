@@ -22,8 +22,8 @@
         Observation
         <input type="text" name="observation" id="observation" value=1>
         <br>
-        Number of elements
-        <input type="text" name="elements" id="elements" value=4>
+        Number of staff
+        <input type="text" name="staff" id="staff" value=0>
 
         <br>
         <input type="submit" value="Start">
@@ -42,8 +42,8 @@
         Observation
         <input type="text" name="element" id="element" value="{{tasks[tasks|length-1].observation + 1}}">
         <br>
-        Number of elements
-        <input type="text" name="elements" id="elements" value=4>
+        Number of staff
+        <input type="text" name="staff" id="staff" value=0>
         <br>
         <input type="submit" value="Start">
     </form>
@@ -68,7 +68,7 @@
         <tr>
             <th>Operator name</th>
             <th>Observation</th>
-            <th>Element</th>
+            <th>Staff</th>
             <th>Date</th>
             <th>Time (seconds)</th>
             <th>Delete?</th>
@@ -78,8 +78,8 @@
         <tr>
             <td>{{ task.operator}}</td>
             <td>{{ task.observation }}</td>
-            <td>{{ task.element }} </td>
-            <td>{{ task.date_created.date() }}</td>
+            <td>{{ task.staff }} </td>
+            <td>{{ task.start_time.date() }}</td>
             <td>{{ "%.2f"|format(task.time_diff) }}</td>
             <td>
                 <a href="/delete/{{task.id}}">Delete</a>
@@ -96,7 +96,7 @@
             <td>{{ task.operator}}</td>
             <td>{{ task.observation }}</td>
             <td>{{ task.element }} </td>
-            <td>{{ task.date_created.date() }}</td>
+            <td>{{ task.start_time.date() }}</td>
             <td>{{ "%.2f"|format(task.time_diff) }}</td>
             <td>
                 <a href="/delete/{{task.id}}">Delete</a>

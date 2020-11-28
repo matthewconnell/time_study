@@ -17,10 +17,11 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     operator = db.Column(db.String(200), nullable=False)
     observation = db.Column(db.Integer, default=0)
+    staff = db.Column(db.Integer, default=0)
     start_time = db.Column(db.DateTime, default=datetime.utcnow)
     end_time = db.Column(db.DateTime, default=datetime.utcnow)
     time_diff = db.Column(db.Integer, default=0)
-    item_description = db.Column(db.String(200), nullable=False)
+    item_description = db.Column(db.String(200))
     sku = db.Column(db.Integer, default=0)
 
     def __repr__(self):
@@ -34,34 +35,26 @@ def index():
     if request.method == 'POST':
 
         employee_name = request.form['content']
-        num_elements = int(request.form['elements'])
+        num_staff = int(request.form['staff'])
 
         tasks = Task.query.order_by(Task.start_time).all()
 
-        names = []
+        new_entry = Task(operator=employee_name)
 
-        for task in tasks:
-            names.append(task.operator)
+        db.session.add(new_entry)
+        print('1')
+        db.session.commit()
+        print('2')
+        return redirect('/')
 
-        occ = names.count(employee_name)
-
-        new_entry = Task(operator=employee_name,
-                        element=occ % num_elements + 1,
-                        observation=np.floor(occ/num_elements) + 1)
-
-        try:
-            db.session.add(new_entry)
-            db.session.commit()
-            return redirect('/')
-
-        except:
-            return "There was an issue creating the observation."
+        # except:
+        #     return "There was an issue creating the observation."
 
     else:
         tasks = Task.query.order_by(Task.start_time).all()
         return render_template('index.html', 
-                                tasks = tasks,
-                                chart=graph()
+                                tasks = tasks#,
+                                # chart=graph()
                                 )
 
 
@@ -104,18 +97,18 @@ def make_df():
     dates = []
     times = []
     index = []
-    elements = []
+    observations = []
 
     for task in tasks:
         names.append(task.operator)
         dates.append(str(task.start_time.date()))
         times.append(task.time_diff)
         index.append(task.observation)
-        elements.append(task.element)
+        observations.append(task.observation)
 
     df = pd.DataFrame({"Observation": index, 
                     "Name": names,
-                    "Element": elements, 
+                    "Count": elements, 
                     "Date": dates, 
                     "Time": times})
 
